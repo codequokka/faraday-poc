@@ -1,0 +1,34 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ruby
+{
+  "name": "Ruby",
+  "image": "mcr.microsoft.com/devcontainers/ruby:1-3.3-bullseye",
+  "containerEnv": {
+    "TZ": "Asia/Tokyo"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // Editor
+        "editor.renderWhitespace": "all",
+        "editor.formatOnSave": true,
+        // Files
+        "files.insertFinalNewline": true,
+        // Remote
+        "remote.autoForwardPorts": false,
+        // Json
+        "[json][jsonc]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit"
+          }
+        },
+        // Ruby
+        "[ruby]": {
+          "editor.defaultFormatter": "Shopify.ruby-lsp"
+        }
+      },
+      "extensions": ["esbenp.prettier-vscode", "shopify.ruby-lsp"]
+    }
+  }
+}
