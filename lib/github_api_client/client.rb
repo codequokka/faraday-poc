@@ -1,6 +1,5 @@
 require 'faraday'
 require 'faraday/retry'
-require 'json'
 
 class GitHubClient
   API_ENDPOINT = 'https://api.github.com'
@@ -11,7 +10,8 @@ class GitHubClient
       interval: 1,
       interval_randomness: 0.5,
       backoff_factor: 2,
-      exceptions: [Faraday::ConnectionFailed]
+      exceptions: [Faraday::ConnectionFailed],
+      methods: %i[get post]
     }
 
     @token = token

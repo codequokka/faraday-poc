@@ -4,7 +4,6 @@ client = GitHubClient.new()
 
 begin
   user = client.get('/users/octocat')
-  p user
   puts user['login']
 rescue => e
   puts "Error: #{e.message}"

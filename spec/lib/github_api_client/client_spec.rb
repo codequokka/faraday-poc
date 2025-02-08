@@ -1,11 +1,5 @@
-require 'faraday'
-require 'faraday/retry'
-require 'json'
-require 'rspec'
 require 'webmock/rspec'
 require 'github_api_client/client'
-
-# Your GitHubClient class (provided in the prompt)
 
 RSpec.describe GitHubClient do
   let(:token) { 'your_token' } # Replace with a test token if needed
@@ -44,6 +38,21 @@ RSpec.describe GitHubClient do
 
         expect { client.get('/users/octocat') }.to raise_error("Client Error: 404")
         expect(a_request(:get, 'https://api.github.com/users/octocat')).to have_been_made.once
+      end
+    end
+  end
+
+  describe '#post' do
+    context 'when connection error occurs and retries successfully' do
+      it 'retries and returns the successful response' do
+        stub_request(:post, api_url)
+          .to_raise(Faraday::ConnectionFailed)
+          .then
+          .to_return(status: 200, body: '{ "login": "octocat" }', headers: { 'Content-Type' => 'application/json' })
+
+        response = client.post('/users/octocat')
+        expect(response['login']).to eq('octocat')
+        expect(a_request(:post, 'https://api.github.com/users/octocat')).to have_been_made.times(2)
       end
     end
   end
