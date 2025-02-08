@@ -4,7 +4,6 @@ require 'json'
 
 class GitHubClient
   API_ENDPOINT = 'https://api.github.com'
-  # API_ENDPOINT = 'https://192.168.0.1'
 
   def initialize(token = nil)
     retry_options = {
@@ -12,7 +11,7 @@ class GitHubClient
       interval: 1,
       interval_randomness: 0.5,
       backoff_factor: 2,
-      retry_statuses: [404]
+      exceptions: [Faraday::ConnectionFailed]
     }
 
     @token = token
