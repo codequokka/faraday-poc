@@ -1,13 +1,24 @@
 require 'faraday'
+require 'faraday/retry'
 require 'json'
 
 class GitHubClient
   API_ENDPOINT = 'https://api.github.com'
+  # API_ENDPOINT = 'https://192.168.0.1'
 
   def initialize(token = nil)
+    retry_options = {
+      max: 2,
+      interval: 1,
+      interval_randomness: 0.5,
+      backoff_factor: 2,
+      retry_statuses: [404]
+    }
+
     @token = token
     @connection = Faraday.new(url: API_ENDPOINT) do |faraday|
       faraday.request :json
+      faraday.request :retry, retry_options
       faraday.response :json
       faraday.adapter Faraday.default_adapter
     end
